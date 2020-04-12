@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.luxyva.jasony.framework.config.apidoc.SwaggerAutoConfiguration,\
+  io.luxyva.jasony.framework.config.JasonyProperties,\
+  io.luxyva.jasony.framework.logging.LoggingAspect
