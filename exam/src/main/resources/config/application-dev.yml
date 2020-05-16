@@ -1,0 +1,82 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+      #defaultZone: http://admin:${jasony.registry.password}@localhost:8761/eureka/
+#logging:
+#  level:
+#    ROOT: DEBUG
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+  shardingsphere:
+    datasource:
+      names: ds0, ds1
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/ds0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+        username: luxyva
+        password: qwas1234
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/ds1?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+        username: luxyva
+        password: qwas1234
+    sharding:
+      tables:
+        t_order:
+          actual-data-nodes: ds$->{0..1}.t_order_$->{0..1}
+          database-strategy:
+            inline:
+              algorithm-expression: ds$->{unit_id % 2}
+              sharding-column: unit_id
+          table-strategy:
+            inline:
+              algorithm-expression: user_id
+              sharding-column: t_order_$->{user_id % 2}
+    props:
+      sql:
+        show: true
+#  datasource:
+#    type: com.zaxxer.hikari.HikariDataSource
+#    url: jdbc:mysql://localhost:3306/email?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+#    username: luxyva
+#    password: qwas1234
+#    hikari:
+#      poolName: Hikari
+#      auto-commit: false
+#      data-source-properties:
+#        cachePrepStmts: true
+#        prepStmtCacheSize: 250
+#        prepStmtCacheSqlLimit: 2048
+#        useServerPrepStmts: true
+#  shardingsphere:
+#    datasource:
+#      names: exam0, exam1
+#      exam0: !!com.zaxxer.hikari.HikariDataSource
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        url: jdbc:mysql://localhost:3306/exam0
+#        username: luxyva
+#        password: qwas1234
+#      exam1: !!com.zaxxer.hikari.HikariDataSource
+#        driver-class-name: com.mysql.jdbc.Driver
+#        url: jdbc:mysql://localhost:3306/exam1
+#        username: luxyva
+#        password: qwas1234
+#    sharding:
+#      default-database-strategy:
+#        inline:
+#          sharding-column: unit_id
+#          algorithm-expression: exam$->{unit_id % 2}
+#      tables:
+#        t_score:
+#          table-strategy:
+#            inline:
+#              sharding-column: user_id
+#              algorithm-expression: t_score$->{user_id % 3}
+

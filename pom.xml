@@ -18,11 +18,10 @@
   <name>Jasony parent POM</name>
 
   <modules>
-    <module>jasony-dependencies</module>
     <module>connect</module>
     <module>base</module>
     <module>discuss</module>
-    <module>email</module>
+    <module>exam</module>
     <module>registry</module>
     <module>gateway</module>
     <module>framework</module>
@@ -42,7 +41,7 @@
   </developers>
 
   <properties>
-    <java.version>8</java.version>
+    <java.version>11</java.version>
     <maven.version>3.3.9</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -54,6 +53,8 @@
     <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     <springfox.version>2.9.2</springfox.version>
     <redisson.version>3.12.4</redisson.version>
+    <mybatis-plus.version>3.3.1.tmp</mybatis-plus.version>
+    <sharding-sphere.version>4.1.0</sharding-sphere.version>
   </properties>
 
   <dependencyManagement>
@@ -74,6 +75,16 @@
         <groupId>org.redisson</groupId>
         <artifactId>redisson-spring-boot-starter</artifactId>
         <version>${redisson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-boot-starter</artifactId>
+        <version>${mybatis-plus.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.shardingsphere</groupId>
+        <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+        <version>${sharding-sphere.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -1,0 +1,9 @@
+jasony:
+  registry:
+    password: admin
+
+spring:
+  profiles:
+    active: dev
+  #active: dev
+    #include: shardingsphere

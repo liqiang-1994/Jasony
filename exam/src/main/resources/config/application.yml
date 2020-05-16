@@ -1,0 +1,186 @@
+spring:
+  application:
+    name: exam
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: USER, ADMIN
+  redis:
+    host: 123.56.217.254
+    port: 6379
+    password: liqiang
+  profiles:
+    active: shardingsphere
+
+server:
+  port: 8084
+#  servlet:
+#    context-path: /email
+
+eureka:
+  client:
+    enabled: true
+    healthcheck:
+      enabled: false
+    fetch-registry: true
+    register-with-eureka: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    service-url:
+      defaultZone: http://admin:${jasony.registry.password}@localhost:8761/eureka/
+  instance:
+    appname: exam
+    instanceId: jasonyExam:${spring.application.instance-id:${random.value}}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    health-check-url-path: /actuator/health
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: '*'
+  endpoint:
+    health:
+      show-details: always
+      #enabled: false
+
+jasony:
+  client-app:
+    name: 'examApp'
+  swagger:
+    default-include-pattern: /api/.*
+    title: exam API
+    description: exam API documentation
+    version: 0.0.1
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license:
+    license-url:
+#
+#resilience4j:
+#  circuitbreaker:
+#    configs:
+#      default:
+#        registerHealthIndicator: false
+#        slidingWindowSize: 10
+#        minimumNumberOfCalls: 5
+#        slidingWindowType: TIME_BASED
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        automaticTransitionFromOpenToHalfOpenEnabled: true
+#        waitDurationInOpenState: 2s
+#        failureRateThreshold: 30
+#        eventConsumerBufferSize: 10
+#        recordExceptions:
+#          - org.springframework.web.client.HttpServerErrorException
+#          - java.io.IOException
+#          - java.lang.NullPointerException
+#  retry:
+#    configs:
+#      default:
+#        maxRetryAttempts: 5
+#        waitDuration: 5
+#        retryExceptions:
+#          - org.springframework.web.client.HttpServerErrorException
+#          - java.io.IOException
+#          - java.lang.NullPointerException
+#  bulkhead:
+#    configs:
+#      default:
+#        maxConcurrentCalls: 100
+#  thread-pool-bulkhead:
+#    configs:
+#      default:
+#        maxThreadPoolSize: 4
+#        coreThreadPoolSize: 2
+#        queueCapacity: 2
+#  ratelimiter:
+#    configs:
+#      default:
+#        registerHealthIndicator: false
+#        limitForPeriod: 10
+#        limitRefreshPeriod: 1s
+#        timeoutDuration: 0
+#        eventConsumerBufferSize: 100
+
+resilience4j.circuitbreaker:
+  instances:
+    backendA:
+      registerHealthIndicator: true
+      slidingWindowSize: 100
+    backendB:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 3
+      slidingWindowType: TIME_BASED
+      minimumNumberOfCalls: 20
+      waitDurationInOpenState: 50s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+     # recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
+
+resilience4j.retry:
+  instances:
+    backendA:
+      maxRetryAttempts: 5
+      waitDuration: 1s
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      retryExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+        - java.lang.NullPointerException
+      ignoreExceptions:
+     #   - io.github.robwin.exception.BusinessException
+    backendB:
+      maxRetryAttempts: 3
+      waitDuration: 10s
+      retryExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+      ignoreExceptions:
+#        - io.github.robwin.exception.BusinessException
+
+resilience4j.bulkhead:
+  instances:
+    backendA:
+      maxConcurrentCalls: 10
+    backendB:
+      maxWaitDuration: 10ms
+      maxConcurrentCalls: 20
+
+resilience4j.thread-pool-bulkhead:
+  instances:
+    backendC:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+
+resilience4j.ratelimiter:
+  instances:
+    backendA:
+      limitForPeriod: 10
+      limitRefreshPeriod: 1s
+      timeoutDuration: 0
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 100
+    backendB:
+      limitForPeriod: 6
+      limitRefreshPeriod: 500ms
+      timeoutDuration: 3s
+
+resilience4j.timelimiter:
+  instances:
+    backendA:
+      timeoutDuration: 2s
+      cancelRunningFuture: true
+    backendB:
+      timeoutDuration: 1s
+      cancelRunningFuture: false
+debug: true
