@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: discuss
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: USER, ADMIN
+server:
+  port: 8085
+
+eureka:
+  client:
+    enabled: true
+    healthcheck:
+      enabled: false
+    fetch-registry: true
+    register-with-eureka: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    service-url:
+      defaultZone: http://admin:${jasony.registry.password}@localhost:8761/eureka/
+  instance:
+    appname: discuss
+    instanceId: jasonyDiscuss:${spring.application.instance-id:${random.value}}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    health-check-url-path: /actuator/health
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: '*'
+  endpoint:
+    health:
+      show-details: always
+      #enabled: false
+
+jasony:
+  client-app:
+    name: 'discussApp'
+  swagger:
+    default-include-pattern: /api/.*
+    title: discuss API
+    description: discuss API documentation
+    version: 0.0.1
+    terms-of-service-url:
+    contact-name:
+    contact-url:
+    contact-email:
+    license:
+    license-url:

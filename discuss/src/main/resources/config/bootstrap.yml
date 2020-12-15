@@ -1,0 +1,9 @@
+jasony:
+  registry:
+    password: admin
+
+spring:
+  application:
+    name: jasony-discuss
+  profiles:
+    active: dev
